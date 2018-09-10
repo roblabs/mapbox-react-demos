@@ -1,21 +1,68 @@
 import React, { Component } from 'react';
+import MapGL, {NavigationControl} from 'react-map-gl';
+
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+const TOKEN = '';
+
+const STYLE = "mapbox://styles/mapbox/streets-v9"
+
+const initialState = {
+  latitude: 37.785164,
+  longitude: -100,
+  zoom: 3.5,
+  bearing: 0,
+  pitch: 0,
+  width: 500,
+  height: 500
+}
+
+export default class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      viewport: initialState,
+      popupInfo: null
+    };
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this._resize);
+    this._resize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._resize);
+  }
+
+  _resize = () => {
+    this.setState({
+      viewport: {
+        ...this.state.viewport,
+        width: this.props.width || window.innerWidth,
+        height: this.props.height || window.innerHeight
+      }
+    });
+  };
+
+  _updateViewport = (viewport) => {
+    this.setState({viewport});
+  }
+
   render() {
+
+    const {viewport} = this.state;
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <MapGL
+        {...viewport}
+        mapStyle={STYLE}
+        onViewportChange={this._updateViewport}
+        mapboxApiAccessToken={TOKEN} >
+
+      </MapGL>
     );
   }
 }
-
-export default App;
