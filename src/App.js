@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MapGL, {NavigationControl} from 'react-map-gl';
 
+import ControlPanel from './ControlPanel';
 import logo from './logo.svg';
 import './App.css';
 
@@ -61,6 +62,8 @@ export default class App extends Component {
         mapStyle={STYLE}
         onViewportChange={this._updateViewport}
         mapboxApiAccessToken={TOKEN} >
+
+        <ControlPanel containerComponent={this.props.containerComponent} />
 
       </MapGL>
     );
